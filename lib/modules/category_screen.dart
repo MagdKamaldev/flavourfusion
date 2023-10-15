@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 class CategroyScreen extends StatelessWidget {
   final Category category;
+  
   CategroyScreen({super.key, required this.category});
 
   @override

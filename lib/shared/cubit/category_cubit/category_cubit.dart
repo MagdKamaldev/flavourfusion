@@ -1,10 +1,13 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flavorfusion/models/categories_model.dart';
-import 'package:flavorfusion/shared/colors.dart';
 import 'package:flavorfusion/shared/components.dart';
 import 'package:flavorfusion/shared/networks/remote/dio_helper.dart';
 import 'package:flavorfusion/shared/networks/remote/end_points.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 part 'category_state.dart';
 
 class CategoryCubit extends Cubit<CategoryState> {
@@ -44,68 +47,53 @@ class CategoryCubit extends Cubit<CategoryState> {
       showCustomSnackBar(context, error.toString(), Colors.red);
     });
   }
-}
 
-Widget defaultFormField({
-  required TextEditingController controller,
-  required TextInputType type,
-  required Function onSubmit,
-  required Function validate,
-  bool isPassword = false,
-  required String label,
-  required IconData prefix,
-  IconData? suffix,
-  Function? suffixPressed,
-  bool isClickable = true,
-  required BuildContext context,
-}) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      TextFormField(
-        validator: (value) {
-          return validate(value);
-        },
-        controller: controller,
-        keyboardType: type,
-        enabled: isClickable,
-        obscureText: isPassword,
-        onFieldSubmitted: (s) {
-          onSubmit();
-        },
-        style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.normal,
-          color: Colors.black, // Set the text color here
-        ),
-        decoration: InputDecoration(
-          labelText: label,
-          labelStyle: Theme.of(context)
-              .textTheme
-              .titleMedium!
-              .copyWith(fontSize: 16, color: raisinBlack),
-          prefixIcon: Icon(
-            prefix,
-            color: carrebianCurrent,
-          ),
-          suffixIcon: suffix != null
-              ? IconButton(
-                  icon: Icon(
-                    suffix,
-                    color: carrebianCurrent,
-                  ),
-                  onPressed: () {
-                    suffixPressed!();
-                  },
-                )
-              : null,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-        ),
-      ),
-      const SizedBox(height: 5),
-    ],
-  );
-}
+  File? storyImage;
+  var pickedFile;
+  var picker = ImagePicker();
 
+  Future<void> getStoryImagefromGallery(context) async {
+    pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      storyImage = File(pickedFile.path);
+      Navigator.pop(context);
+      emit(StoryImagePickedFromGallerySuccessState());
+    } else {
+      showCustomSnackBar(context, "no image selected", Colors.red);
+      emit(StoryImagePickedFromGalleryErrorState());
+    }
+  }
+
+  Future<void> getStoryImagefromCamera(context) async {
+    pickedFile = await picker.pickImage(source: ImageSource.camera);
+    if (pickedFile != null) {
+      storyImage = File(pickedFile.path);
+      Navigator.pop(context);
+      emit(StoryImagePickedFromCameraSuccessState());
+    } else {
+      showCustomSnackBar(context, "no image selected", Colors.red);
+      emit(StoryImagePickedFromCameraErrorState());
+    }
+  }
+
+  void addItem({
+    required String name,
+    required double price,
+    required String description,
+  }) async {
+    FormData formData = FormData.fromMap({
+      "photos": await MultipartFile.fromFile(pickedFile.path),
+      "item": {
+        "category_id": 3,
+        "name": "Cloud Lemon",
+        "price": 60.0,
+        "description": "Lemon",
+      }.toString(),
+    });
+    await DioHelper.postData(url: EndPoints.registerItem, data: formData)
+        .then((value) {})
+        .catchError((e) {
+      print(e);
+    });
+  }
+}

@@ -15,3 +15,11 @@ class AddCategoryLoadingState extends CategoryState{}
 class AddCategorySuccessState extends CategoryState{}
 
 class AddCategoryErrorState extends CategoryState{}
+
+class StoryImagePickedFromGallerySuccessState extends CategoryState{}
+
+class StoryImagePickedFromGalleryErrorState extends CategoryState{}
+
+class StoryImagePickedFromCameraSuccessState extends CategoryState{}
+
+class StoryImagePickedFromCameraErrorState extends CategoryState{}

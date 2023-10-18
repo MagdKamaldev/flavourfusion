@@ -2,10 +2,10 @@ import 'package:dio/dio.dart';
 
 class DioHelper {
   static Dio? dio;
-  static init() { 
+  static init() {
     dio = Dio(
       BaseOptions(
-          baseUrl: "http://192.168.64.88:3021/api/",
+          baseUrl: "http://172.20.10.6:3021/api/",
           receiveDataWhenStatusError: true,
           headers: {
             "Content-Type": "application/json",
@@ -50,7 +50,7 @@ class DioHelper {
   static Future<Response> postData({
     required String url,
     Map<String, dynamic>? query,
-    required Map<String, dynamic> data,
+    required dynamic data,
     String? jwt,
   }) async {
     dio!.options.headers = {

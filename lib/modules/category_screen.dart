@@ -1,11 +1,13 @@
 // ignore_for_file: prefer_const_constructors_in_immutables
 import 'package:flavorfusion/models/categories_model.dart';
+import 'package:flavorfusion/modules/add_item.dart';
 import 'package:flavorfusion/shared/colors.dart';
 import 'package:flutter/material.dart';
+import '../shared/components.dart';
 
 class CategroyScreen extends StatelessWidget {
   final Category category;
-  
+
   CategroyScreen({super.key, required this.category});
 
   @override
@@ -32,6 +34,16 @@ class CategroyScreen extends StatelessWidget {
               theme: theme,
               context: context),
           itemCount: category.items.length,
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          navigateTo(context, AddItem());
+        },
+        backgroundColor: carrebianCurrent,
+        child: Icon(
+          Icons.add,
+          color: lavendarBlush,
         ),
       ),
     );

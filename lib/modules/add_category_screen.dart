@@ -10,6 +10,8 @@ class AddCategory extends StatefulWidget {
   State<AddCategory> createState() => _AddCategoryState();
 }
 
+var formKey = GlobalKey<FormState>();
+
 class _AddCategoryState extends State<AddCategory> {
   var nameController = TextEditingController();
 
@@ -38,31 +40,34 @@ class _AddCategoryState extends State<AddCategory> {
               padding: const EdgeInsets.all(20.0),
               child: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.87,
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.04,
-                      ),
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.15,
-                          child: Image.asset("assets/images/add.png")),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.2,
-                      ),
-                      defaultFormField(
-                          controller: nameController,
-                          type: TextInputType.name,
-                          onSubmit: () {},
-                          validate: (String value) {
-                            if (value.isEmpty) {
-                              return "field is required";
-                            }
-                          },
-                          label: "name",
-                          prefix: Icons.person,
-                          context: context),
-                    ]),
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.04,
+                        ),
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.15,
+                            child: Image.asset("assets/images/add.png")),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.2,
+                        ),
+                        defaultFormField(
+                            controller: nameController,
+                            type: TextInputType.name,
+                            onSubmit: () {},
+                            validate: (String value) {
+                              if (value.isEmpty) {
+                                return "field is required";
+                              }
+                            },
+                            label: "name",
+                            prefix: Icons.person,
+                            context: context),
+                      ]),
+                ),
               ),
             ),
           ),
@@ -70,10 +75,13 @@ class _AddCategoryState extends State<AddCategory> {
               context: context,
               text: "Add Category",
               function: () {
-                cubit.addCategory(name: nameController.text, context: context);
+                if (formKey.currentState!.validate()) {
+                   cubit.addCategory(name: nameController.text, context: context);
                 cubit.getCategories();
                 setState(() {});
                 Navigator.pop(context);
+                }
+                
               }),
         );
       },

@@ -56,7 +56,7 @@ class HomeLayout extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: SizedBox(
-                    height: size.height * 0.4859,
+                    height: size.height * 0.7,
                     child: ListView.separated(
                         itemCount: cubit.categories!.length,
                         separatorBuilder: (context, index) => const SizedBox(

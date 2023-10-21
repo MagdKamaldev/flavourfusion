@@ -1,11 +1,13 @@
 import 'package:dio/dio.dart';
 
+const String serverIp = "http://192.168.1.5:3021";
+
 class DioHelper {
   static Dio? dio;
   static init() {
     dio = Dio(
       BaseOptions(
-          baseUrl: "http://172.20.10.6:3021/api/",
+          baseUrl: "$serverIp/api/",
           receiveDataWhenStatusError: true,
           headers: {
             "Content-Type": "application/json",

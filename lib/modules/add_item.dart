@@ -1,4 +1,5 @@
-// ignore_for_file: must_be_immutable, use_key_in_widget_constructors
+// ignore_for_file: must_be_immutable, use_key_in_widget_constructors, override_on_non_overriding_member, prefer_const_constructors_in_immutables, no_logic_in_create_state, annotate_overrides
+import 'package:flavorfusion/models/categories_model.dart';
 import 'package:flavorfusion/shared/colors.dart';
 import 'package:flavorfusion/shared/components.dart';
 import 'package:flavorfusion/shared/cubit/category_cubit/category_cubit.dart';
@@ -7,12 +8,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddItem extends StatefulWidget {
   @override
-  State<AddItem> createState() => _AddItemState();
+  final Category category;
+  AddItem({required this.category});
+
+  State<AddItem> createState() => _AddItemState(category: category);
 }
 
 class _AddItemState extends State<AddItem> {
+  final Category category;
+  _AddItemState({required this.category});
   var nameController = TextEditingController();
-
+  var priceController = TextEditingController();
+  var descriptionController = TextEditingController();
   var formKey = GlobalKey<FormState>();
 
   @override
@@ -49,7 +56,7 @@ class _AddItemState extends State<AddItem> {
                             child: Image.asset("assets/images/add.png")),
                       ),
                       SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.1,
+                        height: MediaQuery.of(context).size.height * 0.03,
                       ),
                       Text(
                         "Name",
@@ -71,7 +78,51 @@ class _AddItemState extends State<AddItem> {
                           prefix: Icons.person,
                           context: context),
                       SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.07,
+                        height: MediaQuery.of(context).size.height * 0.03,
+                      ),
+                      Text(
+                        "Price",
+                        style: theme.bodyLarge!.copyWith(color: raisinBlack),
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.01,
+                      ),
+                      defaultFormField(
+                          controller: priceController,
+                          type: TextInputType.number,
+                          onSubmit: () {},
+                          validate: (String value) {
+                            if (value.isEmpty) {
+                              return "field is required";
+                            }
+                          },
+                          label: "price",
+                          prefix: Icons.monetization_on,
+                          context: context),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.03,
+                      ),
+                      Text(
+                        "Description",
+                        style: theme.bodyLarge!.copyWith(color: raisinBlack),
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.01,
+                      ),
+                      defaultFormField(
+                          controller: descriptionController,
+                          type: TextInputType.number,
+                          onSubmit: () {},
+                          validate: (String value) {
+                            if (value.isEmpty) {
+                              return "field is required";
+                            }
+                          },
+                          label: "Description",
+                          prefix: Icons.description,
+                          context: context),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.03,
                       ),
                       Text(
                         "Image",
@@ -177,11 +228,18 @@ class _AddItemState extends State<AddItem> {
               context: context,
               text: "Add Item",
               function: () {
-                cubit.addItem(
-                    name: nameController.text, price: 20, description: "good");
-                cubit.getCategories();
-                setState(() {});
-                Navigator.pop(context);
+                if (nameController.text != "" &&
+                    priceController.text != "" &&
+                    descriptionController.text != "") {
+                  cubit.addItem(
+                      name: nameController.text,
+                      price: double.parse(priceController.text),
+                      description: descriptionController.text,
+                      categoryId: category.id);
+                  cubit.getCategories();
+                  setState(() {});
+                  Navigator.pop(context);
+                }
               }),
         );
       },

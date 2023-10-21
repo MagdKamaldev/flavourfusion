@@ -3,7 +3,7 @@ class Item {
   String name;
   int categoryId;
   String description;
-  int price;
+  double price;
   String imageUrl;
 
   Item({
@@ -21,7 +21,7 @@ class Item {
       name: json['name'],
       categoryId: json['category_id'],
       description: json['description'],
-      price: json['price'],
+      price: double.parse(json['price'].toString()),
       imageUrl: json['image_url'],
     );
   }
@@ -33,7 +33,7 @@ class Category {
   List<Item> items;
 
   Category({
-   required  this.id,
+    required this.id,
     required this.name,
     required this.items,
   });

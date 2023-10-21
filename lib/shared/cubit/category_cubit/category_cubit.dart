@@ -80,14 +80,15 @@ class CategoryCubit extends Cubit<CategoryState> {
     required String name,
     required double price,
     required String description,
+    required int categoryId,
   }) async {
     FormData formData = FormData.fromMap({
       "photos": await MultipartFile.fromFile(pickedFile.path),
       "item": {
-        "category_id": 3,
-        "name": "Cloud Lemon",
-        "price": 60.0,
-        "description": "Lemon",
+        "category_id": categoryId,
+        "name": name,
+        "price": price,
+        "description": description,
       }.toString(),
     });
     await DioHelper.postData(url: EndPoints.registerItem, data: formData)

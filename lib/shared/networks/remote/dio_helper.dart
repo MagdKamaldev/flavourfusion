@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-const String serverIp = "http://192.168.1.5:3021";
+const String serverIp = "http://192.168.64.88:3021";
 
 class DioHelper {
   static Dio? dio;

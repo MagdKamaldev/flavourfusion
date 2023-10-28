@@ -1,5 +1,6 @@
-import 'dart:io';
+// ignore_for_file: prefer_typing_uninitialized_variables
 
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flavorfusion/models/categories_model.dart';
 import 'package:flavorfusion/shared/components.dart';
@@ -95,6 +96,24 @@ class CategoryCubit extends Cubit<CategoryState> {
         .then((value) {})
         .catchError((e) {
       print(e);
+    });
+  }
+
+  void deleteItem({
+    required int id,
+    required BuildContext context,
+  }) {
+    emit(DeleteItemLoadingState());
+    DioHelper.postData(
+      url: EndPoints.deleteItem,
+      data: {
+        "id": id,
+      },
+    ).then((value) {
+      showCustomSnackBar(
+          context, value.data["message"].toString(), Colors.green);
+    }).catchError((error) {
+      showCustomSnackBar(context, error.toString(), Colors.red);
     });
   }
 }

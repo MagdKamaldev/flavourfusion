@@ -23,3 +23,9 @@ class StoryImagePickedFromGalleryErrorState extends CategoryState{}
 class StoryImagePickedFromCameraSuccessState extends CategoryState{}
 
 class StoryImagePickedFromCameraErrorState extends CategoryState{}
+
+class DeleteItemLoadingState extends CategoryState{}
+
+class DeleteItemSuccessState extends CategoryState{}
+
+class DeleteItemErrorState extends CategoryState{}
